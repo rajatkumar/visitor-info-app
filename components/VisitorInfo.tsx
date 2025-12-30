@@ -13,8 +13,10 @@ interface VisitorData {
 export function VisitorInfo() {
   const [data, setData] = useState<VisitorData | null>(null);
   const [loading, setLoading] = useState(true);
+  const [userAgent, setUserAgent] = useState<string>('');
 
   useEffect(() => {
+    setUserAgent(navigator.userAgent);
     fetch('/api/visitor-info')
       .then((res) => res.json())
       .then((data: VisitorData) => {
@@ -37,7 +39,8 @@ export function VisitorInfo() {
           <>
             <Skeleton className="h-4 w-[250px] mb-4" />
             <Skeleton className="h-4 w-[200px] mb-4" />
-            <Skeleton className="h-4 w-[150px]" />
+            <Skeleton className="h-4 w-[150px] mb-4" />
+            <Skeleton className="h-4 w-[300px]" />
           </>
         ) : data ? (
           <dl className="space-y-2">
@@ -52,6 +55,10 @@ export function VisitorInfo() {
             <div>
               <dt className="font-semibold">City:</dt>
               <dd>{data.city || 'Unknown'}</dd>
+            </div>
+            <div>
+              <dt className="font-semibold">User Agent:</dt>
+              <dd className="text-sm break-all">{userAgent || 'Unknown'}</dd>
             </div>
           </dl>
         ) : (
